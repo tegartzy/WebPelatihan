@@ -1,11 +1,8 @@
 <?php
-session_start();
-if (!isset($_SESSION["login"]) || empty($_SESSION["login"])) {
-    header('Location: login.php');
-    exit;
-}
-?>
+include_once 'app.php'; // Menggunakan include_once untuk mencegah penyertaan ganda
 
+// HTML dan PHP lainnya
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -50,6 +47,22 @@ if (!isset($_SESSION["login"]) || empty($_SESSION["login"])) {
             font-weight: bold;
         }
 
+        input[type="text"], input[list] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            background-color: #fff;
+            color: #000;
+            border-radius: 0;
+        }
+
+        input[type="text"]:focus, input[list]:focus {
+            outline: none;
+            border-bottom: 2px solid #e81a1a;
+        }
+
         .select2-container--default .select2-selection--single {
             border: 1px solid #ccc;
             border-radius: 0;
@@ -82,41 +95,120 @@ if (!isset($_SESSION["login"]) || empty($_SESSION["login"])) {
             color: red;
             font-size: 12px;
         }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            width: 100%;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <form action="form_responden.php" method="POST">
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nama_responden = $_POST['nama_responden'];
+        $jabatan_responden = $_POST['jabatan_responden'];
+        $nama_sekolah = $_POST['nama_sekolah'];
+        $kabupaten_kota = $_POST['kabupaten_kota'];
+
+        // Debug: tampilkan data POST
+        echo "<pre>";
+        print_r($_POST);
+        echo "</pre>";
+
+        if (tambahidentitas($_POST) > 0) {
+            echo "<script>
+                   
+                    document.location.href = 'rekam.php';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('Data gagal ditambahkan');
+                    
+                  </script>";
+        }
+    }
+    ?>
+
+    <form action="" method="POST">
         <div class="card">
             <h2>IDENTITAS RESPONDEN</h2>
 
             <div class="form-group">
-                <label for="jabatan_responden">Jabatan Responden *</label>
-                <select class="select2" name="jabatan_responden" id="jabatan_responden" required>
-                    <option value="">Pilih Jabatan</option>
-                    <option value="Guru">Guru</option>
-                    <option value="Kepala Sekolah">Kepala Sekolah</option>
-                    <option value="Wakil Kepala Sekolah">Wakil Kepala Sekolah</option>
-                </select>
+                <label for="nama_responden">Nama Responden *</label>
+                <input type="text" id="nama_responden" name="nama_responden" required>
                 <p class="required-message">This is a required question</p>
             </div>
         </div>
 
+        <div class="card">
+            <div class="form-group">
+                <label for="jabatan_responden">Jabatan Responden *</label>
+                <select class="select2" name="jabatan_responden" id="jabatan_responden" required>
+                    <option value="">Pilih Jabatan</option>
+                    <option value="Guru"<?= isset($jabatan_responden) && $jabatan_responden == 'Guru' ? 'selected' : '' ?>>Guru</option>
+                    <option value="KepalaSekolah"<?= isset($jabatan_responden) && $jabatan_responden == 'KepalaSekolah' ? 'selected' : '' ?>>Kepala Sekolah</option>
+                    <option value="WakilKepSek"<?= isset($jabatan_responden) && $jabatan_responden == 'WakilKepSek' ? 'selected' : '' ?>>Wakil Kepala Sekolah</option>
+                </select>
+                <p class="required-message">This is a required question</p>
+            </div>
+        </div>
+        
         <div class="card">
             <div class="form-group">
                 <label for="nama_sekolah">Nama Institusi/Sekolah *</label>
                 <select class="select2" name="nama_sekolah" id="nama_sekolah" required>
                     <option value="">Pilih Sekolah</option>
-                    <option value="SMA 1 Jakarta">SMA 1 Jakarta</option>
-                    <option value="SMA 2 Bandung">SMA 2 Bandung</option>
-                    <option value="SMA 3 Surabaya">SMA 3 Surabaya</option>
+                    <option value="SMA 1 Jakarta"<?= isset($nama_sekolah) && $nama_sekolah == 'SMA 1 Jakarta' ? 'selected' : '' ?>>SMA 1 Jakarta</option>
+                    <option value="SMA 2 Bandung"<?= isset($nama_sekolah) && $nama_sekolah == 'SMA 2 Bandung' ? 'selected' : '' ?>>SMA 2 Bandung</option>
+                    <option value="SMA 3 Surabaya"<?= isset($nama_sekolah) && $nama_sekolah == 'SMA 3 Surabaya' ? 'selected' : '' ?>>SMA 3 Surabaya</option>
                 </select>
                 <p class="required-message">This is a required question</p>
             </div>
         </div>
 
+        <div class="card">
+            <div class="form-group">
+                <label for="kabupaten_kota">Kabupaten/Kota *</label>
+                <select class="select2" name="kabupaten_kota" id="kabupaten_kota" required>
+                    <option value="">Pilih Kabupaten/Kota</option>
+                    <option value="Jakarta"<?= isset($kabupaten_kota) && $kabupaten_kota == 'Jakarta' ? 'selected' : '' ?>>Jakarta</option>
+                    <option value="Bandung"<?= isset($kabupaten_kota) && $kabupaten_kota == 'Bandung' ? 'selected' : '' ?>>Bandung</option>
+                    <option value="Surabaya"<?= isset($kabupaten_kota) && $kabupaten_kota == 'Surabaya' ? 'selected' : '' ?>>Surabaya</option>
+                </select>
+                <p class="required-message">This is a required question</p>
+            </div>
+            </div>
+
+            <div class="card">
+            <div class="form-group">
+                <label for="no_wa">Nomer WhatsApp *</label>
+                <input type="text" id="no_wa" name="no_wa" required>
+                <p class="required-message">This is a required question</p>
+            </div>
+            </div>
+            
+        
+            <div class="card">
+            <div class="form-group">
+                <label for="email">Alamat Email*</label>
+                <input type="text" id="email" name="email" required>
+                <p class="required-message">This is a required question</p>
+            </div>
+            
+        
+       
+
         <div class="button-container">
             <button type="button">Back</button>
-            <button type="submit">Next</button>
+            <button type="submit" name="tambah" class="btn btn-primary" style="float: right;">Tambah</button>
+        </div>
         </div>
     </form>
 
@@ -130,7 +222,5 @@ if (!isset($_SESSION["login"]) || empty($_SESSION["login"])) {
             });
         });
     </script>
-
-    <a href="logout.php">logout</a>
 </body>
 </html>
