@@ -7,16 +7,16 @@ $token_hash = hash("sha256", $token);
 $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
 
 try {
-    $mysqli = require __DIR__ . "/config/database.php";
+    $db = require __DIR__ . "/config/database.php";
     $sql = "UPDATE akun 
             SET reset_token = ?,
                 reset_token_expired = ?
             WHERE email = ?";
-    $stmt = $mysqli->prepare($sql);
+    $stmt = $db->prepare($sql);
     $stmt->bind_param("sss", $token_hash, $expiry, $email);
     $stmt->execute();
 
-    if ($mysqli->affected_rows) {
+    if ($db->affected_rows) {
         $mail = require __DIR__ . "/mailer.php";
         $mail->setFrom("noreply@example.com");
         $mail->addAddress($email);

@@ -6,8 +6,8 @@ include 'config\database.php';
 
 
 if(isset($_POST['login'])) {
-        $username = mysqli_real_escape_string($mysqli, $_POST['email']);
-        $password = mysqli_real_escape_string($mysqli, $_POST['password']);
+        $username = mysqli_real_escape_string($db, $_POST['email']);
+        $password = mysqli_real_escape_string($db, $_POST['password']);
 }
 
 
@@ -16,7 +16,7 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     // Prepare a statement to retrieve the user data
-    $stmt = $mysqli->prepare("SELECT * FROM akun WHERE email = ?");
+    $stmt = $db->prepare("SELECT * FROM akun WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();

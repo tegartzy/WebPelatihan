@@ -1,5 +1,5 @@
 <?php
-include_once 'app.php'; // Menggunakan include_once untuk mencegah penyertaan ganda
+include_once 'config/app.php';
 
 // HTML dan PHP lainnya
 ?>
@@ -117,7 +117,7 @@ include_once 'app.php'; // Menggunakan include_once untuk mencegah penyertaan ga
         $nama_sekolah = $_POST['nama_sekolah'];
         $kabupaten_kota = $_POST['kabupaten_kota'];
 
-        // Debug: tampilkan data POST
+     
         echo "<pre>";
         print_r($_POST);
         echo "</pre>";
