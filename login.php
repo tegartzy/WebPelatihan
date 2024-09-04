@@ -32,7 +32,7 @@ if (isset($_POST['login'])) {
             $_SESSION['email'] = $user_data['email'];
 
             // Redirect to the main page
-            header("Location: identitas.php");
+            header("Location: jenisResponden.php");
             exit;
         } else {
             $error = true;

@@ -1,7 +1,30 @@
 <?php
-include_once 'config/app.php';
+include 'config/app.php';
 
-// HTML dan PHP lainnya
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama_responden = $_POST['nama_responden'];
+    $jabatan_responden = $_POST['jabatan_responden'];
+    $nama_sekolah = $_POST['nama_sekolah'];
+    $kabupaten_kota = $_POST['kabupaten_kota'];
+
+ 
+    echo "<pre>";
+    print_r($_POST);
+    echo "</pre>";
+
+    if (tambahidentitas($_POST) > 0) {
+        // Redirect ke halaman lain
+        header('Location: rekam.php');
+        exit;
+    } else {
+        echo "<script>
+                alert('Data gagal ditambahkan');
+              </script>";
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -110,31 +133,7 @@ include_once 'config/app.php';
     </style>
 </head>
 <body>
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $nama_responden = $_POST['nama_responden'];
-        $jabatan_responden = $_POST['jabatan_responden'];
-        $nama_sekolah = $_POST['nama_sekolah'];
-        $kabupaten_kota = $_POST['kabupaten_kota'];
 
-     
-        echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-
-        if (tambahidentitas($_POST) > 0) {
-            echo "<script>
-                   
-                    document.location.href = 'rekam.php';
-                  </script>";
-        } else {
-            echo "<script>
-                    alert('Data gagal ditambahkan');
-                    
-                  </script>";
-        }
-    }
-    ?>
 
     <form action="" method="POST">
         <div class="card">

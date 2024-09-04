@@ -42,3 +42,4 @@ function tambahidentitas($post)
     // Kembalikan jumlah baris yang terpengaruh
     return mysqli_affected_rows($db);
 }
+
